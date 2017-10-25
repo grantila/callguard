@@ -91,8 +91,8 @@ const guard = syncGuard( console.error.bind( console ) );
 
 fs.open( 'my-file', 'r', guard( ( err, fd ) =>
 {
-    // We REALLY don't want to throw here
-    doSomethingWithFd( fd ); // Please don't throw!
+    // We really shouldn't throw here, it is not logically sound
+    doSomethingWithFd( fd ); // But it's guarded anyway, so we're safe
 } ) );
 ```
 
@@ -102,6 +102,8 @@ Now, if `doSomethingWithFd` would throw, this wouldn't propagate to the `fs.open
 ## Promisification
 
 One typical example is when using promises in a codebase, but needing to react to callbacks. In this case, it would often be a bug to throw in the callback, and if this is wrapped in a `new Promise( )` function body, the promise can easily be canceled while the callback remains exception safe.
+
+NOTE; It will probably be expected that the promise can be rejected, but only because `otherLib` fails/throws, not that the logic *here* throws (that's a handling error). `callguard` will not *fix* such bugs in your code, but **it will** ensure you can **safely handle it** in the promise chain.
 
 ```ts
 const p = new Promise( ( resolve, reject ) =>
