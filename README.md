@@ -1,6 +1,9 @@
-# `callguard`: your callback exception guard
+[![npm version][npm-image]][npm-url]
+[![build status][travis-image]][travis-url]
 
-# Rationale
+# Your callback exception guard
+
+## Rationale
 
 When using API's with callback support, the 3rd party module will call your function. Most of Node.js' asynchronous functions work like this. If you unintentionally throw an exception there, you won't know what happens - what is that module supposed to do?
 
@@ -127,3 +130,8 @@ const p = new Promise( ( resolve, reject ) =>
     otherLib.on( 'error', reject ); // Not everything must be guarded
 } );
 ```
+
+[npm-image]: https://img.shields.io/npm/v/awesome-phonenumber.svg
+[npm-url]: https://npmjs.org/package/awesome-phonenumber
+[travis-image]: https://img.shields.io/travis/grantila/awesome-phonenumber.svg
+[travis-url]: https://travis-ci.org/grantila/awesome-phonenumber
