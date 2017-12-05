@@ -692,4 +692,39 @@ describe('async', function () {
         }); });
     });
 });
+describe('errors', function () {
+    it('should print to console.error when internal error handler throws', function () { return __awaiter(_this, void 0, void 0, function () {
+        var oldError, spy, fn, ret;
+        return __generator(this, function (_a) {
+            oldError = console.error;
+            spy = sinon.spy();
+            console.error = spy;
+            fn = _1.syncGuard(function (err) { throw new Error("foo"); });
+            ret = fn(function () { throw new Error("bar"); })();
+            sinon.assert.calledTwice(spy);
+            chai_1.expect(spy.args[0][0]).to.contain("[callguard");
+            chai_1.expect(spy.args[0][1].message).to.contain("foo");
+            chai_1.expect(spy.args[1][0]).to.contain("[callguard");
+            chai_1.expect(spy.args[1][1].message).to.contain("bar");
+            console.error = oldError;
+            return [2 /*return*/];
+        });
+    }); });
+    it('should print to console.error when non-Error is thrown', function () { return __awaiter(_this, void 0, void 0, function () {
+        var oldError, guardSpy, spy, fn, ret;
+        return __generator(this, function (_a) {
+            oldError = console.error;
+            guardSpy = sinon.spy();
+            spy = sinon.spy();
+            console.error = spy;
+            fn = _1.syncGuard(guardSpy, { longStackTraces: true });
+            ret = fn(function () { throw void 0; })();
+            sinon.assert.notCalled(guardSpy);
+            sinon.assert.calledOnce(spy);
+            chai_1.expect(spy.args[0][0]).to.contain("probably caused");
+            console.error = oldError;
+            return [2 /*return*/];
+        });
+    }); });
+});
 //# sourceMappingURL=callguard.js.map

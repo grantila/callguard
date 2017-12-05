@@ -570,3 +570,47 @@ describe( 'async', ( ) =>
 		} );
 	} );
 } );
+
+describe( 'errors', ( ) =>
+{
+	it( 'should print to console.error when internal error handler throws',
+		async ( ) =>
+	{
+		const oldError = console.error;
+
+		const spy = sinon.spy( );
+
+		console.error = spy;
+
+		const fn = syncGuard( ( err ) => { throw new Error( "foo" ) } );
+		const ret = fn( ( ) => { throw new Error( "bar" ) } )( );
+
+		sinon.assert.calledTwice( spy );
+		expect( spy.args[ 0 ][ 0 ] ).to.contain( "[callguard" );
+		expect( spy.args[ 0 ][ 1 ].message ).to.contain( "foo" );
+		expect( spy.args[ 1 ][ 0 ] ).to.contain( "[callguard" );
+		expect( spy.args[ 1 ][ 1 ].message ).to.contain( "bar" );
+
+		console.error = oldError;
+	} );
+
+	it( 'should print to console.error when non-Error is thrown',
+		async ( ) =>
+	{
+		const oldError = console.error;
+
+		const guardSpy = sinon.spy( );
+		const spy = sinon.spy( );
+
+		console.error = spy;
+
+		const fn = syncGuard( guardSpy, { longStackTraces: true } );
+		const ret = fn( ( ) => { throw void 0; } )( );
+
+		sinon.assert.notCalled( guardSpy );
+		sinon.assert.calledOnce( spy );
+		expect( spy.args[ 0 ][ 0 ] ).to.contain( "probably caused" );
+
+		console.error = oldError;
+	} );
+} );

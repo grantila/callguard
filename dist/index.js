@@ -1,7 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 function handle(handler, err, stacks) {
-    if (stacks === void 0) { stacks = []; }
     try {
         var handledErr = stacks.length === 0 ? err : Object.create(err);
         if (stacks.length > 0) {
@@ -18,7 +17,7 @@ function handle(handler, err, stacks) {
         }
     }
     catch (err) {
-        console.error("[callguard internal error]", err);
+        console.error("[callguard] handle error (probably caused by non-Error throw)]", err);
     }
 }
 function syncGuard(handler, opts) {

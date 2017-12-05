@@ -3,7 +3,7 @@
 function handle(
 	handler: ( err: Error ) => void,
 	err: Error,
-	stacks: ReadonlyArray< string > = [ ]
+	stacks: ReadonlyArray< string >
 )
 : void
 {
@@ -31,7 +31,10 @@ function handle(
 	}
 	catch ( err )
 	{
-		console.error( "[callguard internal error]", err );
+		console.error(
+			"[callguard] handle error (probably caused by non-Error throw)]",
+			err
+		);
 	}
 }
 
