@@ -13,7 +13,7 @@
   "directories": {},
   "scripts": {
     "build": "./node_modules/.bin/rimraf dist && ./node_modules/.bin/tsc -p .",
-    "test": "node_modules/.bin/mocha dist/test",
+    "test": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --bail --check-leaks dist/test",
     "buildtest": "npm run build && npm run test"
   },
   "repository": {
@@ -32,6 +32,8 @@
     "@types/mocha": "2.x",
     "@types/node": "8.x",
     "chai": "4.x",
+    "coveralls": "2.x",
+    "istanbul": "1.1.0-alpha.1",
     "mocha": "4.x",
     "rimraf": "2.x",
     "sinon": "4.x",

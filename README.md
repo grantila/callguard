@@ -1,5 +1,6 @@
 [![npm version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
+[![coverage status][coverage-image]][coverage-url]
 
 # Your callback exception guard
 
@@ -7,7 +8,7 @@
 
 When using API's with callback support, the 3rd party module will call your function. Most of Node.js' asynchronous functions work like this. If you unintentionally throw an exception there, you won't know what happens - what is that module supposed to do?
 
-Promises are a solution to this, as they propagate the error back to you transparently through the *promise chain*, but arbirtary callbacks lack this defined flow.
+Promises are a solution to this, as they propagate the error back to you transparently through the *promise chain*, but arbitrary callbacks lack this defined flow.
 
 There are other situations where callbacks are used, and where promises won't automatically solve the handling of exceptions.
 
@@ -131,7 +132,9 @@ const p = new Promise( ( resolve, reject ) =>
 } );
 ```
 
-[npm-image]: https://img.shields.io/npm/v/awesome-phonenumber.svg
-[npm-url]: https://npmjs.org/package/awesome-phonenumber
-[travis-image]: https://img.shields.io/travis/grantila/awesome-phonenumber.svg
-[travis-url]: https://travis-ci.org/grantila/awesome-phonenumber
+[npm-image]: https://img.shields.io/npm/v/callguard.svg
+[npm-url]: https://npmjs.org/package/callguard
+[travis-image]: https://img.shields.io/travis/grantila/callguard.svg
+[travis-url]: https://travis-ci.org/grantila/callguard
+[coverage-image]: https://coveralls.io/repos/github/grantila/callguard/badge.svg?branch=master
+[coverage-url]: https://coveralls.io/github/grantila/callguard?branch=master
