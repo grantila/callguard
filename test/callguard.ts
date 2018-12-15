@@ -11,7 +11,7 @@ function immediate( )
 	return new Promise( resolve => setImmediate( resolve ) );
 }
 
-async function rejection( promise )
+async function rejection( promise: Promise< any > ): Promise< Error >
 {
 	try
 	{
@@ -21,6 +21,7 @@ async function rejection( promise )
 	{
 		return err;
 	}
+	/* istanbul ignore next */
 	throw new Error( "Expected promise to contain exception" );
 }
 

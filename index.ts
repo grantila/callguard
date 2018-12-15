@@ -3,7 +3,7 @@
 function handle(
 	handler: ( err: Error ) => void,
 	err: Error,
-	stacks: ReadonlyArray< string >
+	stacks: ReadonlyArray< string | undefined >
 )
 : void
 {
@@ -54,21 +54,21 @@ export interface AsyncGuardOptions extends SharedGuardOptions
 }
 
 
-export type GuardedFunction< R > =
-	( ...args ) =>
+export type GuardedFunction< R, T > =
+	( ...args: Array< T > ) =>
 		R;
 
 export type GuardedFunctionMaker =
-	< R >( fn: ( ...args ) => R ) =>
-		GuardedFunction< R >;
+	< R, T >( fn: ( ...args: Array< T > ) => R ) =>
+		GuardedFunction< R, T >;
 
-export type GuardedAsyncFunction< R > =
-	( ...args ) =>
+export type GuardedAsyncFunction< R, T > =
+	( ...args: Array< T > ) =>
 		R | PromiseLike< R >;
 
 export type GuardedAsyncFunctionMaker =
-	< R >( fn: ( ...args ) => R | PromiseLike< R > ) =>
-		GuardedAsyncFunction< R >;
+	< R, T >( fn: ( ...args: Array< T > ) => R | PromiseLike< R > ) =>
+		GuardedAsyncFunction< R, T >;
 
 
 export function syncGuard(
@@ -81,10 +81,10 @@ export function syncGuard(
 	const defaultReturn = ( opts && opts.defaultReturn != null )
 		? opts.defaultReturn
 		: null;
-	const stacks = [ ];
+	const stacks: Array< string | undefined > = [ ];
 
-	return function< R >( fn: ( ...args ) => R )
-	: GuardedFunction< R >
+	return function< R, T >( fn: ( ...args: Array< T > ) => R )
+	: GuardedFunction< R, T >
 	{
 		if ( captureCallstacks )
 			stacks.push( ( new Error( "[callguard]" ) ).stack );
@@ -125,10 +125,10 @@ export function asyncGuard(
 	const defaultReturn = ( opts && opts.defaultReturn != null )
 		? opts.defaultReturn
 		: null;
-	const stacks = [ ];
+	const stacks: Array< string | undefined > = [ ];
 
-	return function< R >( fn: ( ...args ) => R | PromiseLike< R > )
-	: GuardedAsyncFunction< R >
+	return function< R, T >( fn: ( ...args: Array< T > ) => R | PromiseLike< R > )
+	: GuardedAsyncFunction< R, T >
 	{
 		if ( captureCallstacks )
 			stacks.push( ( new Error( "[callguard]" ) ).stack );
