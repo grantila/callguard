@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("mocha");
 var chai_1 = require("chai");
 var sinon = require("sinon");
-var _1 = require("../");
+var __1 = require("../");
 function immediate() {
     return new Promise(function (resolve) { return setImmediate(resolve); });
 }
@@ -67,7 +67,7 @@ describe('sync', function () {
         var spy, fn, ret;
         return __generator(this, function (_a) {
             spy = sinon.spy();
-            fn = _1.syncGuard(spy);
+            fn = __1.syncGuard(spy);
             ret = fn(function () { return void (0); })();
             chai_1.expect(ret).to.be.undefined;
             sinon.assert.notCalled(spy);
@@ -78,7 +78,7 @@ describe('sync', function () {
         var spy, fn, ret;
         return __generator(this, function (_a) {
             spy = sinon.spy();
-            fn = _1.syncGuard(spy);
+            fn = __1.syncGuard(spy);
             ret = fn(function () { return null; })();
             chai_1.expect(ret).to.be.null;
             sinon.assert.notCalled(spy);
@@ -89,7 +89,7 @@ describe('sync', function () {
         var spy, fn, ret;
         return __generator(this, function (_a) {
             spy = sinon.spy();
-            fn = _1.syncGuard(spy);
+            fn = __1.syncGuard(spy);
             ret = fn(function () { return "foo"; })();
             chai_1.expect(ret).to.equal("foo");
             sinon.assert.notCalled(spy);
@@ -100,7 +100,7 @@ describe('sync', function () {
         var spy, fn, ret;
         return __generator(this, function (_a) {
             spy = sinon.spy();
-            fn = _1.syncGuard(spy);
+            fn = __1.syncGuard(spy);
             ret = fn(function (value) { return value; })();
             chai_1.expect(ret).to.be.undefined;
             sinon.assert.notCalled(spy);
@@ -111,7 +111,7 @@ describe('sync', function () {
         var spy, fn, ret;
         return __generator(this, function (_a) {
             spy = sinon.spy();
-            fn = _1.syncGuard(spy);
+            fn = __1.syncGuard(spy);
             ret = fn(function (value) { return value; })("foo");
             chai_1.expect(ret).to.equal("foo");
             sinon.assert.notCalled(spy);
@@ -122,7 +122,7 @@ describe('sync', function () {
         var spy, fn, ret;
         return __generator(this, function (_a) {
             spy = sinon.spy();
-            fn = _1.syncGuard(spy);
+            fn = __1.syncGuard(spy);
             ret = fn(function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
@@ -141,7 +141,7 @@ describe('sync', function () {
             return __generator(this, function (_a) {
                 spy = sinon.spy();
                 err = new Error("foo");
-                fn = _1.syncGuard(spy);
+                fn = __1.syncGuard(spy);
                 ret = fn(function () {
                     throw err;
                 })();
@@ -156,7 +156,7 @@ describe('sync', function () {
             return __generator(this, function (_a) {
                 spy = sinon.spy();
                 err = new Error("foo");
-                fn = _1.syncGuard(spy, { longStackTraces: true });
+                fn = __1.syncGuard(spy, { longStackTraces: true });
                 ret = fn(function () {
                     throw err;
                 })();
@@ -176,7 +176,7 @@ describe('sync', function () {
                         return [4 /*yield*/, rejection(err)];
                     case 1:
                         theError = _a.sent();
-                        fn = _1.syncGuard(spy);
+                        fn = __1.syncGuard(spy);
                         ret = fn(function () {
                             // Evil evil user
                             return err;
@@ -200,7 +200,7 @@ describe('sync', function () {
                         return [4 /*yield*/, rejection(err)];
                     case 1:
                         theError = _a.sent();
-                        fn = _1.syncGuard(spy, { catchAsync: true });
+                        fn = __1.syncGuard(spy, { catchAsync: true });
                         ret = fn(function () {
                             // Evil evil user
                             return err;
@@ -225,7 +225,7 @@ describe('sync', function () {
                         return [4 /*yield*/, rejection(err)];
                     case 1:
                         theError = _a.sent();
-                        fn = _1.syncGuard(spy, { catchAsync: true, longStackTraces: true });
+                        fn = __1.syncGuard(spy, { catchAsync: true, longStackTraces: true });
                         ret = fn(function () {
                             // Evil evil user
                             return err;
@@ -247,7 +247,7 @@ describe('sync', function () {
             return __generator(this, function (_a) {
                 spy = sinon.spy();
                 err = new Error("foo");
-                fn = _1.syncGuard(spy, { defaultReturn: "bar" });
+                fn = __1.syncGuard(spy, { defaultReturn: "bar" });
                 ret = fn(function () {
                     throw err;
                 })();
@@ -262,7 +262,7 @@ describe('sync', function () {
             return __generator(this, function (_a) {
                 spy = sinon.spy();
                 err = new Error("foo");
-                fn = _1.syncGuard(spy, { defaultReturn: "bar", longStackTraces: true });
+                fn = __1.syncGuard(spy, { defaultReturn: "bar", longStackTraces: true });
                 ret = fn(function () {
                     throw err;
                 })();
@@ -282,7 +282,7 @@ describe('sync', function () {
                         return [4 /*yield*/, rejection(err)];
                     case 1:
                         theError = _a.sent();
-                        fn = _1.syncGuard(spy, { defaultReturn: "bar" });
+                        fn = __1.syncGuard(spy, { defaultReturn: "bar" });
                         ret = fn(function () {
                             // Evil evil user
                             return err;
@@ -306,7 +306,7 @@ describe('sync', function () {
                         return [4 /*yield*/, rejection(err)];
                     case 1:
                         theError = _a.sent();
-                        fn = _1.syncGuard(spy, { defaultReturn: "bar", catchAsync: true });
+                        fn = __1.syncGuard(spy, { defaultReturn: "bar", catchAsync: true });
                         ret = fn(function () {
                             // Evil evil user
                             return err;
@@ -331,7 +331,7 @@ describe('sync', function () {
                         return [4 /*yield*/, rejection(err)];
                     case 1:
                         theError = _a.sent();
-                        fn = _1.syncGuard(spy, {
+                        fn = __1.syncGuard(spy, {
                             defaultReturn: "bar",
                             catchAsync: true,
                             longStackTraces: true
@@ -359,7 +359,7 @@ describe('async', function () {
             switch (_a.label) {
                 case 0:
                     spy = sinon.spy();
-                    fn = _1.asyncGuard(spy);
+                    fn = __1.asyncGuard(spy);
                     return [4 /*yield*/, fn(function () { return void (0); })()];
                 case 1:
                     ret = _a.sent();
@@ -375,7 +375,7 @@ describe('async', function () {
             switch (_a.label) {
                 case 0:
                     spy = sinon.spy();
-                    fn = _1.asyncGuard(spy);
+                    fn = __1.asyncGuard(spy);
                     return [4 /*yield*/, fn(function () { return null; })()];
                 case 1:
                     ret = _a.sent();
@@ -391,7 +391,7 @@ describe('async', function () {
             switch (_a.label) {
                 case 0:
                     spy = sinon.spy();
-                    fn = _1.asyncGuard(spy);
+                    fn = __1.asyncGuard(spy);
                     return [4 /*yield*/, fn(function () { return "foo"; })()];
                 case 1:
                     ret = _a.sent();
@@ -407,7 +407,7 @@ describe('async', function () {
             switch (_a.label) {
                 case 0:
                     spy = sinon.spy();
-                    fn = _1.asyncGuard(spy);
+                    fn = __1.asyncGuard(spy);
                     return [4 /*yield*/, fn(function () { return Promise.resolve(void (0)); })()];
                 case 1:
                     ret = _a.sent();
@@ -423,7 +423,7 @@ describe('async', function () {
             switch (_a.label) {
                 case 0:
                     spy = sinon.spy();
-                    fn = _1.asyncGuard(spy);
+                    fn = __1.asyncGuard(spy);
                     return [4 /*yield*/, fn(function () { return Promise.resolve(null); })()];
                 case 1:
                     ret = _a.sent();
@@ -439,7 +439,7 @@ describe('async', function () {
             switch (_a.label) {
                 case 0:
                     spy = sinon.spy();
-                    fn = _1.asyncGuard(spy);
+                    fn = __1.asyncGuard(spy);
                     return [4 /*yield*/, fn(function () { return Promise.resolve("foo"); })()];
                 case 1:
                     ret = _a.sent();
@@ -455,7 +455,7 @@ describe('async', function () {
             switch (_a.label) {
                 case 0:
                     spy = sinon.spy();
-                    fn = _1.asyncGuard(spy);
+                    fn = __1.asyncGuard(spy);
                     return [4 /*yield*/, fn(function (value) { return value; })()];
                 case 1:
                     ret = _a.sent();
@@ -471,7 +471,7 @@ describe('async', function () {
             switch (_a.label) {
                 case 0:
                     spy = sinon.spy();
-                    fn = _1.asyncGuard(spy);
+                    fn = __1.asyncGuard(spy);
                     return [4 /*yield*/, fn(function (value) { return value; })("foo")];
                 case 1:
                     ret = _a.sent();
@@ -487,7 +487,7 @@ describe('async', function () {
             switch (_a.label) {
                 case 0:
                     spy = sinon.spy();
-                    fn = _1.asyncGuard(spy);
+                    fn = __1.asyncGuard(spy);
                     return [4 /*yield*/, fn(function () {
                             var args = [];
                             for (var _i = 0; _i < arguments.length; _i++) {
@@ -511,7 +511,7 @@ describe('async', function () {
                     case 0:
                         spy = sinon.spy();
                         err = new Error("foo");
-                        fn = _1.asyncGuard(spy);
+                        fn = __1.asyncGuard(spy);
                         return [4 /*yield*/, fn(function () {
                                 throw err;
                             })()];
@@ -531,7 +531,7 @@ describe('async', function () {
                     case 0:
                         spy = sinon.spy();
                         err = new Error("foo");
-                        fn = _1.asyncGuard(spy, { longStackTraces: true });
+                        fn = __1.asyncGuard(spy, { longStackTraces: true });
                         return [4 /*yield*/, fn(function () {
                                 throw err;
                             })()];
@@ -554,7 +554,7 @@ describe('async', function () {
                         return [4 /*yield*/, rejection(err)];
                     case 1:
                         theError = _a.sent();
-                        fn = _1.asyncGuard(spy);
+                        fn = __1.asyncGuard(spy);
                         return [4 /*yield*/, fn(function () {
                                 return err;
                             })()];
@@ -580,7 +580,7 @@ describe('async', function () {
                         return [4 /*yield*/, rejection(err)];
                     case 1:
                         theError = _a.sent();
-                        fn = _1.asyncGuard(spy, { longStackTraces: true });
+                        fn = __1.asyncGuard(spy, { longStackTraces: true });
                         return [4 /*yield*/, fn(function () {
                                 return err;
                             })()];
@@ -605,7 +605,7 @@ describe('async', function () {
                     case 0:
                         spy = sinon.spy();
                         err = new Error("foo");
-                        fn = _1.asyncGuard(spy, { defaultReturn: "bar" });
+                        fn = __1.asyncGuard(spy, { defaultReturn: "bar" });
                         return [4 /*yield*/, fn(function () {
                                 throw err;
                             })()];
@@ -625,7 +625,7 @@ describe('async', function () {
                     case 0:
                         spy = sinon.spy();
                         err = new Error("foo");
-                        fn = _1.asyncGuard(spy, { defaultReturn: "bar", longStackTraces: true });
+                        fn = __1.asyncGuard(spy, { defaultReturn: "bar", longStackTraces: true });
                         return [4 /*yield*/, fn(function () {
                                 throw err;
                             })()];
@@ -648,7 +648,7 @@ describe('async', function () {
                         return [4 /*yield*/, rejection(err)];
                     case 1:
                         theError = _a.sent();
-                        fn = _1.asyncGuard(spy, { defaultReturn: "bar" });
+                        fn = __1.asyncGuard(spy, { defaultReturn: "bar" });
                         return [4 /*yield*/, fn(function () {
                                 return err;
                             })()];
@@ -674,7 +674,7 @@ describe('async', function () {
                         return [4 /*yield*/, rejection(err)];
                     case 1:
                         theError = _a.sent();
-                        fn = _1.asyncGuard(spy, { defaultReturn: "bar", longStackTraces: true });
+                        fn = __1.asyncGuard(spy, { defaultReturn: "bar", longStackTraces: true });
                         return [4 /*yield*/, fn(function () {
                                 return err;
                             })()];
@@ -699,7 +699,7 @@ describe('errors', function () {
             oldError = console.error;
             spy = sinon.spy();
             console.error = spy;
-            fn = _1.syncGuard(function (err) { throw new Error("foo"); });
+            fn = __1.syncGuard(function (err) { throw new Error("foo"); });
             ret = fn(function () { throw new Error("bar"); })();
             sinon.assert.calledTwice(spy);
             chai_1.expect(spy.args[0][0]).to.contain("[callguard");
@@ -717,7 +717,7 @@ describe('errors', function () {
             guardSpy = sinon.spy();
             spy = sinon.spy();
             console.error = spy;
-            fn = _1.syncGuard(guardSpy, { longStackTraces: true });
+            fn = __1.syncGuard(guardSpy, { longStackTraces: true });
             ret = fn(function () { throw void 0; })();
             sinon.assert.notCalled(guardSpy);
             sinon.assert.calledOnce(spy);
