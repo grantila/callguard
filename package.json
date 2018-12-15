@@ -10,6 +10,9 @@
   "homepage": "https://github.com/grantila/callguard#readme",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "directories": {},
   "scripts": {
     "build": "./node_modules/.bin/rimraf dist && ./node_modules/.bin/tsc -p .",
