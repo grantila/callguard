@@ -54,21 +54,158 @@ export interface AsyncGuardOptions extends SharedGuardOptions
 }
 
 
-export type GuardedFunction< R, T > =
-	( ...args: Array< T > ) =>
+export type GuardedFunction0< R > =
+	( ) =>
+		R;
+export type GuardedFunction1< R, T1 > =
+	( t1: T1 ) =>
+		R;
+export type GuardedFunction2< R, T1, T2 > =
+	( t1: T1, t2: T2 ) =>
+		R;
+export type GuardedFunction3< R, T1, T2, T3 > =
+	( t1: T1, t2: T2, t3: T3 ) =>
+		R;
+export type GuardedFunction4< R, T1, T2, T3, T4 > =
+	( t1: T1, t2: T2, t3: T3, t4: T4 ) =>
+		R;
+export type GuardedFunction5< R, T1, T2, T3, T4, T5 > =
+	( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5 ) =>
+		R;
+export type GuardedFunction6< R, T1, T2, T3, T4, T5, T6 > =
+	( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6 ) =>
+		R;
+export type GuardedFunction7< R, T1, T2, T3, T4, T5, T6, T7 > =
+	( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7 ) =>
+		R;
+export type GuardedFunction8< R, T1, T2, T3, T4, T5, T6, T7, T8 > =
+	( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8 ) =>
 		R;
 
 export type GuardedFunctionMaker =
-	< R, T >( fn: ( ...args: Array< T > ) => R ) =>
-		GuardedFunction< R, T >;
+	(
+		< R >( fn: ( ) => R ) =>
+			GuardedFunction0< R >
+	) & (
+		< R, T1 >(
+			fn: ( t1: T1 ) => R
+		) =>
+			GuardedFunction1< R, T1 >
+	) & (
+		< R, T1, T2>(
+			fn: ( t1: T1, t2: T2 ) => R
+		) =>
+			GuardedFunction2< R, T1, T2 >
+	) & (
+		< R, T1, T2, T3 >(
+			fn: ( t1: T1, t2: T2, t3: T3 ) => R
+		) =>
+			GuardedFunction3< R, T1, T2, T3 >
+	) & (
+		< R, T1, T2, T3, T4 >(
+			fn: ( t1: T1, t2: T2, t3: T3, t4: T4 ) => R
+		) =>
+			GuardedFunction4< R, T1, T2, T3, T4 >
+	) & (
+		< R, T1, T2, T3, T4, T5 >(
+			fn: ( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5 ) => R
+		) =>
+			GuardedFunction5< R, T1, T2, T3, T4, T5 >
+	) & (
+		< R, T1, T2, T3, T4, T5, T6 >(
+			fn: ( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6 ) => R
+		) =>
+			GuardedFunction6< R, T1, T2, T3, T4, T5, T6 >
+	) & (
+		< R, T1, T2, T3, T4, T5, T6, T7 >(
+			fn: ( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7 ) => R
+		) =>
+			GuardedFunction7< R, T1, T2, T3, T4, T5, T6, T7 >
+	) & (
+		< R, T1, T2, T3, T4, T5, T6, T7, T8 >( fn:
+			( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8
+			) => R
+		) =>
+			GuardedFunction8< R, T1, T2, T3, T4, T5, T6, T7, T8 >
+	);
 
-export type GuardedAsyncFunction< R, T > =
-	( ...args: Array< T > ) =>
+export type GuardedAsyncFunction0< R > =
+	( ) =>
+		R | PromiseLike< R >;
+export type GuardedAsyncFunction1< R, T1 > =
+	( t1: T1 ) =>
+		R | PromiseLike< R >;
+export type GuardedAsyncFunction2< R, T1, T2 > =
+	( t1: T1, t2: T2 ) =>
+		R | PromiseLike< R >;
+export type GuardedAsyncFunction3< R, T1, T2, T3 > =
+	( t1: T1, t2: T2, t3: T3 ) =>
+		R | PromiseLike< R >;
+export type GuardedAsyncFunction4< R, T1, T2, T3, T4 > =
+	( t1: T1, t2: T2, t3: T3, t4: T4 ) =>
+		R | PromiseLike< R >;
+export type GuardedAsyncFunction5< R, T1, T2, T3, T4, T5 > =
+	( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5 ) =>
+		R | PromiseLike< R >;
+export type GuardedAsyncFunction6< R, T1, T2, T3, T4, T5, T6 > =
+	( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6 ) =>
+		R | PromiseLike< R >;
+export type GuardedAsyncFunction7< R, T1, T2, T3, T4, T5, T6, T7 > =
+	( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7 ) =>
+		R | PromiseLike< R >;
+export type GuardedAsyncFunction8< R, T1, T2, T3, T4, T5, T6, T7, T8 > =
+	( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8 ) =>
 		R | PromiseLike< R >;
 
 export type GuardedAsyncFunctionMaker =
-	< R, T >( fn: ( ...args: Array< T > ) => R | PromiseLike< R > ) =>
-		GuardedAsyncFunction< R, T >;
+	(
+		< R >( fn: ( ) => R ) =>
+			GuardedAsyncFunction0< R >
+	) & (
+		< R, T1 >(
+			fn: ( t1: T1 ) => R | PromiseLike< R >
+		) =>
+			GuardedAsyncFunction1< R, T1 >
+	) & (
+		< R, T1, T2>(
+			fn: ( t1: T1, t2: T2 ) => R | PromiseLike< R >
+		) =>
+			GuardedAsyncFunction2< R, T1, T2 >
+	) & (
+		< R, T1, T2, T3 >(
+			fn: ( t1: T1, t2: T2, t3: T3 ) => R | PromiseLike< R >
+		) =>
+			GuardedAsyncFunction3< R, T1, T2, T3 >
+	) & (
+		< R, T1, T2, T3, T4 >(
+			fn: ( t1: T1, t2: T2, t3: T3, t4: T4 ) => R | PromiseLike< R >
+		) =>
+			GuardedAsyncFunction4< R, T1, T2, T3, T4 >
+	) & (
+		< R, T1, T2, T3, T4, T5 >(
+			fn: ( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5 ) =>
+				R | PromiseLike< R >
+		) =>
+			GuardedAsyncFunction5< R, T1, T2, T3, T4, T5 >
+	) & (
+		< R, T1, T2, T3, T4, T5, T6 >(
+			fn: ( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6 ) =>
+				R | PromiseLike< R >
+		) =>
+			GuardedAsyncFunction6< R, T1, T2, T3, T4, T5, T6 >
+	) & (
+		< R, T1, T2, T3, T4, T5, T6, T7 >(
+			fn: ( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7 ) =>
+				R | PromiseLike< R >
+		) =>
+			GuardedAsyncFunction7< R, T1, T2, T3, T4, T5, T6, T7 >
+	) & (
+		< R, T1, T2, T3, T4, T5, T6, T7, T8 >( fn:
+			( t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8
+			) => R | PromiseLike< R >
+		) =>
+			GuardedAsyncFunction8< R, T1, T2, T3, T4, T5, T6, T7, T8 >
+	);
 
 
 export function syncGuard(
@@ -83,8 +220,10 @@ export function syncGuard(
 		: null;
 	const stacks: Array< string | undefined > = [ ];
 
-	return function< R, T >( fn: ( ...args: Array< T > ) => R )
-	: GuardedFunction< R, T >
+	return function< R >(
+		fn: ( ...args: any ) => R
+	)
+	: GuardedFunction0< R >
 	{
 		if ( captureCallstacks )
 			stacks.push( ( new Error( "[callguard]" ) ).stack );
@@ -127,8 +266,8 @@ export function asyncGuard(
 		: null;
 	const stacks: Array< string | undefined > = [ ];
 
-	return function< R, T >( fn: ( ...args: Array< T > ) => R | PromiseLike< R > )
-	: GuardedAsyncFunction< R, T >
+	return function< R >( fn: ( ...args: any ) => R | PromiseLike< R > )
+	: GuardedAsyncFunction0< R >
 	{
 		if ( captureCallstacks )
 			stacks.push( ( new Error( "[callguard]" ) ).stack );

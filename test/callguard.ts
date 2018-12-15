@@ -4,7 +4,7 @@ import 'mocha';
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 
-import { asyncGuard, syncGuard } from '../';
+import { asyncGuard, syncGuard } from '../index';
 
 function immediate( )
 {
@@ -60,12 +60,12 @@ describe( 'sync', ( ) =>
 		sinon.assert.notCalled( spy );
 	} );
 
-	it( 'should forward zero argument', async ( ) =>
+	it( 'should forward zero arguments', async ( ) =>
 	{
 		const spy = sinon.spy( );
 
 		const fn = syncGuard( spy );
-		const ret = fn( value => value )( );
+		const ret = fn( ( ) => { } )( );
 
 		expect( ret ).to.be.undefined;
 		sinon.assert.notCalled( spy );
@@ -76,7 +76,7 @@ describe( 'sync', ( ) =>
 		const spy = sinon.spy( );
 
 		const fn = syncGuard( spy );
-		const ret = fn( value => value )( "foo" );
+		const ret = fn( ( value: string ) => value )( "foo" );
 
 		expect( ret ).to.equal( "foo" );
 		sinon.assert.notCalled( spy );
@@ -87,9 +87,31 @@ describe( 'sync', ( ) =>
 		const spy = sinon.spy( );
 
 		const fn = syncGuard( spy );
-		const ret = fn( ( ...args ) => args )( "foo", "bar" );
+		const ret = fn( ( a: number, b: string ) => ( [ a, b ] ) )( 42, "x" );
 
-		expect( ret ).to.deep.equal( [ "foo", "bar" ] );
+		expect( ret ).to.deep.equal( [ 42, "x" ] );
+		sinon.assert.notCalled( spy );
+	} );
+
+	it( 'should forward 8 arguments', async ( ) =>
+	{
+		const spy = sinon.spy( );
+
+		const fn = syncGuard( spy );
+		const caller =
+			(
+				a: number,
+				b: string,
+				c: number,
+				d: string,
+				e: number,
+				f: string,
+				g: number,
+				h: string
+			) => ( [ a, b, c, d, e, f, g, h ] );
+		const ret = fn( caller )( 1, "a", 2, "b", 3, "c", 4, "d" );
+
+		expect( ret ).to.deep.equal( [ 1, "a", 2, "b", 3, "c", 4, "d" ] );
 		sinon.assert.notCalled( spy );
 	} );
 
@@ -376,12 +398,12 @@ describe( 'async', ( ) =>
 		sinon.assert.notCalled( spy );
 	} );
 
-	it( 'should forward zero argument', async ( ) =>
+	it( 'should forward zero arguments', async ( ) =>
 	{
 		const spy = sinon.spy( );
 
 		const fn = asyncGuard( spy );
-		const ret = await fn( value => value )( );
+		const ret = await fn( ( ) => { } )( );
 
 		expect( ret ).to.be.undefined;
 		sinon.assert.notCalled( spy );
@@ -392,7 +414,7 @@ describe( 'async', ( ) =>
 		const spy = sinon.spy( );
 
 		const fn = asyncGuard( spy );
-		const ret = await fn( value => value )( "foo" );
+		const ret = await fn( ( s: string ) => s )( "foo" );
 
 		expect( ret ).to.equal( "foo" );
 		sinon.assert.notCalled( spy );
@@ -403,9 +425,32 @@ describe( 'async', ( ) =>
 		const spy = sinon.spy( );
 
 		const fn = asyncGuard( spy );
-		const ret = await fn( ( ...args ) => args )( "foo", "bar" );
+		const ret = await fn( ( a: number, b: string ) => ( [ a, b ] ) )
+			( 42, "x" );
 
-		expect( ret ).to.deep.equal( [ "foo", "bar" ] );
+		expect( ret ).to.deep.equal( [ 42, "x" ] );
+		sinon.assert.notCalled( spy );
+	} );
+
+	it( 'should forward 8 arguments', async ( ) =>
+	{
+		const spy = sinon.spy( );
+
+		const fn = asyncGuard( spy );
+		const caller =
+			(
+				a: number,
+				b: string,
+				c: number,
+				d: string,
+				e: number,
+				f: string,
+				g: number,
+				h: string
+			) => ( [ a, b, c, d, e, f, g, h ] );
+		const ret = await fn( caller )( 1, "a", 2, "b", 3, "c", 4, "d" );
+
+		expect( ret ).to.deep.equal( [ 1, "a", 2, "b", 3, "c", 4, "d" ] );
 		sinon.assert.notCalled( spy );
 	} );
 
