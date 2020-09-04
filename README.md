@@ -1,4 +1,5 @@
 [![npm version][npm-image]][npm-url]
+[![downloads][downloads-image]][npm-url]
 [![build status][travis-image]][travis-url]
 [![coverage status][coverage-image]][coverage-url]
 
@@ -134,6 +135,7 @@ const p = new Promise( ( resolve, reject ) =>
 
 [npm-image]: https://img.shields.io/npm/v/callguard.svg
 [npm-url]: https://npmjs.org/package/callguard
+[downloads-image]: https://img.shields.io/npm/dm/callguard.svg
 [travis-image]: https://img.shields.io/travis/grantila/callguard.svg
 [travis-url]: https://travis-ci.org/grantila/callguard
 [coverage-image]: https://coveralls.io/repos/github/grantila/callguard/badge.svg?branch=master

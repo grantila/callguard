@@ -1,10 +1,4 @@
-'use strict';
-
-import 'mocha';
-import { expect } from 'chai';
-import * as sinon from 'sinon';
-
-import { asyncGuard, syncGuard } from '../index';
+import { asyncGuard, syncGuard } from './index';
 
 function immediate( )
 {
@@ -29,73 +23,73 @@ describe( 'sync', ( ) =>
 {
 	it( 'should allow success flow through with undefined', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = syncGuard( spy );
 		const ret = fn( ( ) => void( 0 ) )( );
 
-		expect( ret ).to.be.undefined;
-		sinon.assert.notCalled( spy );
+		expect( ret ).toBeUndefined( );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should allow success flow through with null', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = syncGuard( spy );
 		const ret = fn( ( ) => null )( );
 
-		expect( ret ).to.be.null;
-		sinon.assert.notCalled( spy );
+		expect( ret ).toBeNull( );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should allow success flow through with value', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = syncGuard( spy );
 		const ret = fn( ( ) => "foo" )( );
 
-		expect( ret ).to.equal( "foo" );
-		sinon.assert.notCalled( spy );
+		expect( ret ).toEqual( "foo" );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should forward zero arguments', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = syncGuard( spy );
 		const ret = fn( ( ) => { } )( );
 
-		expect( ret ).to.be.undefined;
-		sinon.assert.notCalled( spy );
+		expect( ret ).toBeUndefined( );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should forward one argument', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = syncGuard( spy );
 		const ret = fn( ( value: string ) => value )( "foo" );
 
-		expect( ret ).to.equal( "foo" );
-		sinon.assert.notCalled( spy );
+		expect( ret ).toEqual( "foo" );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should forward multiple arguments', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = syncGuard( spy );
 		const ret = fn( ( a: number, b: string ) => ( [ a, b ] ) )( 42, "x" );
 
-		expect( ret ).to.deep.equal( [ 42, "x" ] );
-		sinon.assert.notCalled( spy );
+		expect( ret ).toStrictEqual( [ 42, "x" ] );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should forward 8 arguments', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = syncGuard( spy );
 		const caller =
@@ -111,15 +105,15 @@ describe( 'sync', ( ) =>
 			) => ( [ a, b, c, d, e, f, g, h ] );
 		const ret = fn( caller )( 1, "a", 2, "b", 3, "c", 4, "d" );
 
-		expect( ret ).to.deep.equal( [ 1, "a", 2, "b", 3, "c", 4, "d" ] );
-		sinon.assert.notCalled( spy );
+		expect( ret ).toStrictEqual( [ 1, "a", 2, "b", 3, "c", 4, "d" ] );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	describe( 'default return value', ( ) =>
 	{
 		it( 'should catch sync errors', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = new Error( "foo" );
 
@@ -129,14 +123,14 @@ describe( 'sync', ( ) =>
 				throw err;
 			} )( );
 
-			expect( ret ).to.be.null;
-			sinon.assert.calledWith( spy, err );
-			expect( spy.args[ 0 ][ 0 ].stack ).not.to.contain( "[callguard]" );
+			expect( ret ).toBeNull( );
+			expect( spy.mock.calls[ 0 ][ 0 ] ).toBe( err );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).not.toContain( "[callguard]" );
 		} );
 
 		it( 'should catch sync errors with long stack if wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = new Error( "foo" );
 
@@ -146,14 +140,14 @@ describe( 'sync', ( ) =>
 				throw err;
 			} )( );
 
-			expect( ret ).to.be.null;
-			sinon.assert.calledOnce( spy );
-			expect( spy.args[ 0 ][ 0 ].stack ).to.contain( "[callguard]" );
+			expect( ret ).toBeNull( );
+			expect( spy.mock.calls.length ).toBe( 1 );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).toContain( "[callguard]" );
 		} );
 
 		it( 'should not catch async errors if not wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = Promise.reject( new Error( "foo" ) );
 			const theError = await rejection( err );
@@ -167,13 +161,13 @@ describe( 'sync', ( ) =>
 
 			await immediate( );
 
-			expect( ret ).to.not.be.null;
-			sinon.assert.notCalled( spy );
+			expect( ret ).not.toBeNull( );
+			expect( spy.mock.calls.length ).toBe( 0 );
 		} );
 
 		it( 'should catch async errors if wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = Promise.reject( new Error( "foo" ) );
 			const theError = await rejection( err );
@@ -187,14 +181,14 @@ describe( 'sync', ( ) =>
 
 			await immediate( );
 
-			expect( ret ).to.not.be.null;
-			sinon.assert.calledWith( spy, theError );
-			expect( spy.args[ 0 ][ 0 ].stack ).not.to.contain( "[callguard]" );
+			expect( ret ).not.toBeNull( );
+			expect( spy.mock.calls[ 0 ][ 0 ] ).toBe( theError );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).not.toContain( "[callguard]" );
 		} );
 
 		it( 'should catch async errors with long stack if wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = Promise.reject( new Error( "foo" ) );
 			const theError = await rejection( err );
@@ -211,9 +205,9 @@ describe( 'sync', ( ) =>
 
 			await immediate( );
 
-			expect( ret ).to.not.be.null;
-			sinon.assert.calledOnce( spy );
-			expect( spy.args[ 0 ][ 0 ].stack ).to.contain( "[callguard]" );
+			expect( ret ).not.toBeNull( );
+			expect( spy.mock.calls.length ).toBe( 1 );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).toContain( "[callguard]" );
 		} );
 	} );
 
@@ -221,7 +215,7 @@ describe( 'sync', ( ) =>
 	{
 		it( 'should catch sync errors', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = new Error( "foo" );
 
@@ -231,14 +225,14 @@ describe( 'sync', ( ) =>
 				throw err;
 			} )( );
 
-			expect( ret ).to.equal( "bar" );
-			sinon.assert.calledWith( spy, err );
-			expect( spy.args[ 0 ][ 0 ].stack ).not.to.contain( "[callguard]" );
+			expect( ret ).toEqual( "bar" );
+			expect( spy.mock.calls[ 0 ][ 0 ] ).toBe( err );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).not.toContain( "[callguard]" );
 		} );
 
 		it( 'should catch sync errors with long stack if wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = new Error( "foo" );
 
@@ -251,14 +245,14 @@ describe( 'sync', ( ) =>
 				throw err;
 			} )( );
 
-			expect( ret ).to.equal( "bar" );
-			sinon.assert.calledOnce( spy );
-			expect( spy.args[ 0 ][ 0 ].stack ).to.contain( "[callguard]" );
+			expect( ret ).toEqual( "bar" );
+			expect( spy.mock.calls.length ).toBe( 1 );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).toContain( "[callguard]" );
 		} );
 
 		it( 'should not catch async errors if not wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = Promise.reject( new Error( "foo" ) );
 			const theError = await rejection( err );
@@ -272,13 +266,13 @@ describe( 'sync', ( ) =>
 
 			await immediate( );
 
-			expect( ret ).to.not.equal( "bar" );
-			sinon.assert.notCalled( spy );
+			expect( ret ).not.toEqual( "bar" );
+			expect( spy.mock.calls.length ).toBe( 0 );
 		} );
 
 		it( 'should catch async errors if wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = Promise.reject( new Error( "foo" ) );
 			const theError = await rejection( err );
@@ -295,14 +289,14 @@ describe( 'sync', ( ) =>
 
 			await immediate( );
 
-			expect( ret ).to.not.equal( "bar" );
-			sinon.assert.calledWith( spy, theError );
-			expect( spy.args[ 0 ][ 0 ].stack ).not.to.contain( "[callguard]" );
+			expect( ret ).not.toEqual( "bar" );
+			expect( spy.mock.calls[ 0 ][ 0 ] ).toBe( theError );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).not.toContain( "[callguard]" );
 		} );
 
 		it( 'should catch async errors with long stack if wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = Promise.reject( new Error( "foo" ) );
 			const theError = await rejection( err );
@@ -323,9 +317,9 @@ describe( 'sync', ( ) =>
 
 			await immediate( );
 
-			expect( ret ).to.not.equal( "bar" );
-			sinon.assert.calledOnce( spy );
-			expect( spy.args[ 0 ][ 0 ].stack ).to.contain( "[callguard]" );
+			expect( ret ).not.toEqual( "bar" );
+			expect( spy.mock.calls.length ).toBe( 1 );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).toContain( "[callguard]" );
 		} );
 	} );
 } );
@@ -334,107 +328,107 @@ describe( 'async', ( ) =>
 {
 	it( 'should allow sync success flow through with undefined', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = asyncGuard( spy );
 		const ret = await fn( ( ) => void( 0 ) )( );
 
-		expect( ret ).to.be.undefined;
-		sinon.assert.notCalled( spy );
+		expect( ret ).toBeUndefined( );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should allow sync success flow through with null', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = asyncGuard( spy );
 		const ret = await fn( ( ) => null )( );
 
-		expect( ret ).to.be.null;
-		sinon.assert.notCalled( spy );
+		expect( ret ).toBeNull( );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should allow sync success flow through with value', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = asyncGuard( spy );
 		const ret = await fn( ( ) => "foo" )( );
 
-		expect( ret ).to.equal( "foo" );
-		sinon.assert.notCalled( spy );
+		expect( ret ).toEqual( "foo" );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should allow async success flow through with undefined', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = asyncGuard( spy );
 		const ret = await fn( ( ) => Promise.resolve( void( 0 ) ) )( );
 
-		expect( ret ).to.be.undefined;
-		sinon.assert.notCalled( spy );
+		expect( ret ).toBeUndefined( );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should allow async success flow through with null', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = asyncGuard( spy );
 		const ret = await fn( ( ) => Promise.resolve( null ) )( );
 
-		expect( ret ).to.be.null;
-		sinon.assert.notCalled( spy );
+		expect( ret ).toBeNull( );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should allow async success flow through with value', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = asyncGuard( spy );
 		const ret = await fn( ( ) => Promise.resolve( "foo" ) )( );
 
-		expect( ret ).to.equal( "foo" );
-		sinon.assert.notCalled( spy );
+		expect( ret ).toEqual( "foo" );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should forward zero arguments', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = asyncGuard( spy );
 		const ret = await fn( ( ) => { } )( );
 
-		expect( ret ).to.be.undefined;
-		sinon.assert.notCalled( spy );
+		expect( ret ).toBeUndefined( );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should forward one argument', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = asyncGuard( spy );
 		const ret = await fn( ( s: string ) => s )( "foo" );
 
-		expect( ret ).to.equal( "foo" );
-		sinon.assert.notCalled( spy );
+		expect( ret ).toEqual( "foo" );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should forward multiple arguments', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = asyncGuard( spy );
 		const ret = await fn( ( a: number, b: string ) => ( [ a, b ] ) )
 			( 42, "x" );
 
-		expect( ret ).to.deep.equal( [ 42, "x" ] );
-		sinon.assert.notCalled( spy );
+		expect( ret ).toStrictEqual( [ 42, "x" ] );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	it( 'should forward 8 arguments', async ( ) =>
 	{
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		const fn = asyncGuard( spy );
 		const caller =
@@ -450,15 +444,15 @@ describe( 'async', ( ) =>
 			) => ( [ a, b, c, d, e, f, g, h ] );
 		const ret = await fn( caller )( 1, "a", 2, "b", 3, "c", 4, "d" );
 
-		expect( ret ).to.deep.equal( [ 1, "a", 2, "b", 3, "c", 4, "d" ] );
-		sinon.assert.notCalled( spy );
+		expect( ret ).toStrictEqual( [ 1, "a", 2, "b", 3, "c", 4, "d" ] );
+		expect( spy.mock.calls.length ).toBe( 0 );
 	} );
 
 	describe( 'default return value', ( ) =>
 	{
 		it( 'should catch sync errors', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = new Error( "foo" );
 
@@ -468,14 +462,14 @@ describe( 'async', ( ) =>
 				throw err;
 			} )( );
 
-			expect( ret ).to.be.null;
-			sinon.assert.calledWith( spy, err );
-			expect( spy.args[ 0 ][ 0 ].stack ).not.to.contain( "[callguard]" );
+			expect( ret ).toBeNull( );
+			expect( spy.mock.calls[ 0 ][ 0 ] ).toBe( err );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).not.toContain( "[callguard]" );
 		} );
 
 		it( 'should catch sync errors with long stack if wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = new Error( "foo" );
 
@@ -485,14 +479,14 @@ describe( 'async', ( ) =>
 				throw err;
 			} )( );
 
-			expect( ret ).to.be.null;
-			sinon.assert.calledOnce( spy );
-			expect( spy.args[ 0 ][ 0 ].stack ).to.contain( "[callguard]" );
+			expect( ret ).toBeNull( );
+			expect( spy.mock.calls.length ).toBe( 1 );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).toContain( "[callguard]" );
 		} );
 
 		it( 'should catch async errors', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = Promise.reject( new Error( "foo" ) );
 			const theError = await rejection( err );
@@ -505,14 +499,14 @@ describe( 'async', ( ) =>
 
 			await immediate( );
 
-			expect( ret ).to.be.null;
-			sinon.assert.calledWith( spy, theError );
-			expect( spy.args[ 0 ][ 0 ].stack ).not.to.contain( "[callguard]" );
+			expect( ret ).toBeNull( );
+			expect( spy.mock.calls[ 0 ][ 0 ] ).toBe( theError );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).not.toContain( "[callguard]" );
 		} );
 
 		it( 'should catch async errors with long stack if wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = Promise.reject( new Error( "foo" ) );
 			const theError = await rejection( err );
@@ -526,9 +520,9 @@ describe( 'async', ( ) =>
 
 			await immediate( );
 
-			expect( ret ).to.be.null;
-			sinon.assert.calledOnce( spy );
-			expect( spy.args[ 0 ][ 0 ].stack ).to.contain( "[callguard]" );
+			expect( ret ).toBeNull( );
+			expect( spy.mock.calls.length ).toBe( 1 );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).toContain( "[callguard]" );
 		} );
 	} );
 
@@ -536,7 +530,7 @@ describe( 'async', ( ) =>
 	{
 		it( 'should catch sync errors', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = new Error( "foo" );
 
@@ -546,14 +540,14 @@ describe( 'async', ( ) =>
 				throw err;
 			} )( );
 
-			expect( ret ).to.equal( "bar" );
-			sinon.assert.calledWith( spy, err );
-			expect( spy.args[ 0 ][ 0 ].stack ).not.to.contain( "[callguard]" );
+			expect( ret ).toEqual( "bar" );
+			expect( spy.mock.calls[ 0 ][ 0 ] ).toBe( err );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).not.toContain( "[callguard]" );
 		} );
 
 		it( 'should catch sync errors with long stack if wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = new Error( "foo" );
 
@@ -566,14 +560,14 @@ describe( 'async', ( ) =>
 				throw err;
 			} )( );
 
-			expect( ret ).to.equal( "bar" );
-			sinon.assert.calledOnce( spy );
-			expect( spy.args[ 0 ][ 0 ].stack ).to.contain( "[callguard]" );
+			expect( ret ).toEqual( "bar" );
+			expect( spy.mock.calls.length ).toBe( 1 );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).toContain( "[callguard]" );
 		} );
 
 		it( 'should catch async errors', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = Promise.reject( new Error( "foo" ) );
 			const theError = await rejection( err );
@@ -587,14 +581,14 @@ describe( 'async', ( ) =>
 
 			await immediate( );
 
-			expect( ret ).to.equal( "bar" );
-			sinon.assert.calledWith( spy, theError );
-			expect( spy.args[ 0 ][ 0 ].stack ).not.to.contain( "[callguard]" );
+			expect( ret ).toEqual( "bar" );
+			expect( spy.mock.calls[ 0 ][ 0 ] ).toBe( theError );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).not.toContain( "[callguard]" );
 		} );
 
 		it( 'should catch async errors with long stack if wanted', async ( ) =>
 		{
-			const spy = sinon.spy( );
+			const spy = jest.fn( );
 
 			const err = Promise.reject( new Error( "foo" ) );
 			const theError = await rejection( err );
@@ -610,9 +604,9 @@ describe( 'async', ( ) =>
 
 			await immediate( );
 
-			expect( ret ).to.equal( "bar" );
-			sinon.assert.calledOnce( spy );
-			expect( spy.args[ 0 ][ 0 ].stack ).to.contain( "[callguard]" );
+			expect( ret ).toEqual( "bar" );
+			expect( spy.mock.calls.length ).toBe( 1 );
+			expect( spy.mock.calls[ 0 ][ 0 ].stack ).toContain( "[callguard]" );
 		} );
 	} );
 } );
@@ -624,18 +618,18 @@ describe( 'errors', ( ) =>
 	{
 		const oldError = console.error;
 
-		const spy = sinon.spy( );
+		const spy = jest.fn( );
 
 		console.error = spy;
 
 		const fn = syncGuard( ( err ) => { throw new Error( "foo" ) } );
 		const ret = fn( ( ) => { throw new Error( "bar" ) } )( );
 
-		sinon.assert.calledTwice( spy );
-		expect( spy.args[ 0 ][ 0 ] ).to.contain( "[callguard" );
-		expect( spy.args[ 0 ][ 1 ].message ).to.contain( "foo" );
-		expect( spy.args[ 1 ][ 0 ] ).to.contain( "[callguard" );
-		expect( spy.args[ 1 ][ 1 ].message ).to.contain( "bar" );
+		expect( spy.mock.calls.length ).toBe( 2 );
+		expect( spy.mock.calls[ 0 ][ 0 ] ).toContain( "[callguard" );
+		expect( spy.mock.calls[ 0 ][ 1 ].message ).toContain( "foo" );
+		expect( spy.mock.calls[ 1 ][ 0 ] ).toContain( "[callguard" );
+		expect( spy.mock.calls[ 1 ][ 1 ].message ).toContain( "bar" );
 
 		console.error = oldError;
 	} );
@@ -645,17 +639,17 @@ describe( 'errors', ( ) =>
 	{
 		const oldError = console.error;
 
-		const guardSpy = sinon.spy( );
-		const spy = sinon.spy( );
+		const guardSpy = jest.fn( );
+		const spy = jest.fn( );
 
 		console.error = spy;
 
 		const fn = syncGuard( guardSpy, { longStackTraces: true } );
 		const ret = fn( ( ) => { throw void 0; } )( );
 
-		sinon.assert.notCalled( guardSpy );
-		sinon.assert.calledOnce( spy );
-		expect( spy.args[ 0 ][ 0 ] ).to.contain( "probably caused" );
+		expect( guardSpy.mock.calls.length ).toBe( 0 );
+		expect( spy.mock.calls.length ).toBe( 1 );
+		expect( spy.mock.calls[ 0 ][ 0 ] ).toContain( "probably caused" );
 
 		console.error = oldError;
 	} );

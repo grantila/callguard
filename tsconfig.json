@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"declaration": true,
 		"lib": [ "es2015", "es2017" ],
+		"types": [ "node", "jest" ],
 		"outDir": "dist",
 		"sourceMap": true,
 		"module": "CommonJS",

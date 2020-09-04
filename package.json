@@ -16,11 +16,8 @@
   "directories": {},
   "scripts": {
     "build": "./node_modules/.bin/rimraf dist && ./node_modules/.bin/tsc -p .",
-    "mocha": "node_modules/.bin/mocha --bail --check-leaks dist/test",
-    "test": "node_modules/.bin/nyc npm run mocha",
+    "test": "node_modules/.bin/jest --coverage",
     "buildtest": "npm run build && npm run test",
-    "travis-deploy-once": "travis-deploy-once",
-    "semantic-release": "semantic-release",
     "cz": "git-cz"
   },
   "repository": {
@@ -36,20 +33,13 @@
     "handler"
   ],
   "devDependencies": {
-    "@types/chai": "^4.1.7",
-    "@types/mocha": "5.x",
-    "@types/node": "10.x",
-    "@types/sinon": "^7.0.0",
-    "chai": "4.x",
-    "coveralls": "3.x",
-    "cz-conventional-changelog": "2.x",
-    "mocha": "5.x",
-    "nyc": "13.x",
-    "rimraf": "2.x",
-    "semantic-release": "15.x",
-    "sinon": "7.x",
-    "travis-deploy-once": "5.x",
-    "typescript": "3.x"
+    "@types/jest": "^26.0.13",
+    "@types/node": "14.6.4",
+    "cz-conventional-changelog": "3.3.0",
+    "jest": "^26.4.2",
+    "rimraf": "3.0.2",
+    "ts-jest": "^26.3.0",
+    "typescript": "4.0.2"
   },
   "config": {
     "commitizen": {
